@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reelist — find your next watch</title>
+<meta name="description" content="A poster-first movie recommender: search a title, see what's similar in writing and in genre." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <a class="logo" href="/">Reelist</a>
+
+  <form class="search-form" id="searchForm" autocomplete="off">
+    <input
+      type="search"
+      id="searchInput"
+      name="q"
+      placeholder="Search a title you love…"
+      aria-label="Search for a movie"
+    />
+    <ul class="search-suggestions" id="searchSuggestions" hidden></ul>
+  </form>
+</header>
+
+<main id="mainContent">
+
+  <section class="hero" id="hero" aria-live="polite">
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+      <p class="hero-kicker">Tonight's pick</p>
+      <h1 id="heroTitle">Loading a pick for you&hellip;</h1>
+      <p id="heroOverview" class="hero-overview"></p>
+      <div class="hero-actions">
+        <button id="heroDetailsBtn" class="btn btn-primary" type="button">More like this</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="statusBanner" class="status-banner" hidden></div>
+
+  <div id="rows" class="rows"></div>
+
+</main>
+
+<footer class="site-footer">
+  <p>Posters and metadata via TMDB. Similarity comes from a TF‑IDF model trained on the local catalog.</p>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" type="button" aria-label="Close">&times;</button>
+    <div id="modalContent" class="modal-content"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>

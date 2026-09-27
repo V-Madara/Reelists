@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+numpy
+pandas
+httpx
+pydantic
+python-dotenv
+scikit-learn==1.7.2
