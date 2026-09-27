@@ -1,88 +1,133 @@
-# Reelist
+<div align="center">
 
-A poster-first movie recommender: search or browse a title, and see what's
-similar in both **writing** (a local TF‑IDF model) and **genre** (TMDB).
+# 🎬 Reelist
+
+### A poster-first movie recommender
+
+Search or browse a title and discover what's similar — in **writing style** *and* **genre**.
+
+<a href="https://reelists-1.onrender.com/">
+  <img alt="Live Demo" src="https://img.shields.io/badge/🔴_Live_Demo-Visit_Site-e50914?style=for-the-badge">
+</a>
+
+<br><br>
+
+<img alt="Python" src="https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white">
+<img alt="FastAPI" src="https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white">
+<img alt="Frontend" src="https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-E34F26?style=flat-square&logo=html5&logoColor=white">
+<img alt="TMDB" src="https://img.shields.io/badge/Data-TMDB-01D277?style=flat-square&logo=themoviedatabase&logoColor=white">
+<img alt="Deploy" src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render&logoColor=white">
+<img alt="License" src="https://img.shields.io/badge/No%20Build%20Step-Vanilla%20JS-yellow?style=flat-square">
+
+</div>
+
+---
+
+## ✨ What is Reelist?
+
+Reelist blends **two** recommendation signals into a single, clean, poster-driven interface — no sign-up, no bloat, just movies you'll actually like.
+
+<div align="center">
+
+| Signal | Powered by | Captures |
+|:---:|:---:|:---|
+| 📝 **Writing similarity** | Local TF-IDF model | Plot, tone & thematic overlap |
+| 🎭 **Genre similarity** | TMDB API | Category & audience overlap |
+
+</div>
+
+> 💡 **Graceful fallback:** if TMDB is ever unreachable, Reelist automatically switches to a local movie catalog for browsing, search, and recommendations — just without posters or release dates.
+
+---
+
+## 📁 Project Structure
 
 ```
 project/
-├── backend/            FastAPI service (your original main.py, lightly adapted)
+├── backend/                 FastAPI service
 │   ├── main.py
 │   ├── requirements.txt
 │   ├── .env.example
 │   └── df.pkl, indices.pkl, tfidf_matrix.pkl, tfidf.pkl   ← add these yourself
-├── frontend/            Static HTML/CSS/JS, no build step
+├── frontend/                 Static HTML/CSS/JS — zero build step
 │   ├── index.html
 │   ├── css/styles.css
 │   └── js/{config.js, app.js}
-└── render.yaml          Render Blueprint for both services
+└── render.yaml               Render Blueprint for both services
 ```
 
-## 1. Run it locally
+---
 
-Use the root Python 3.14 environment for both services. In PowerShell, start
-the backend:
+## 🚀 Quickstart — Run Locally
 
-```bash
+Use the root Python 3.14 environment for both services.
+
+**① Start the backend** *(PowerShell, from `backend/`)*
+
+```powershell
 cd backend
 ..\.venv314\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-The API and interactive docs are at `http://127.0.0.1:8000` and
-`http://127.0.0.1:8000/docs`.
+📍 API live at `http://127.0.0.1:8000` · Interactive docs at `http://127.0.0.1:8000/docs`
 
-In a second PowerShell terminal from the project root, start the frontend:
+**② Start the frontend** *(second terminal, from the project root)*
 
 ```powershell
 .\.venv314\Scripts\python.exe -m http.server 5500 --bind 127.0.0.1 --directory frontend
 ```
 
-Visit `http://127.0.0.1:5500`. The frontend API URL is configured in
-`frontend/config.js`.
+📍 Visit `http://127.0.0.1:5500` — the API URL is configured in `frontend/config.js`
 
-If TMDB is unavailable, the app automatically uses the local movie catalog
-for browsing, search, and recommendations. Local catalog cards do not include
-TMDB posters or release dates.
+### 🔑 Unlocking TMDB posters & live data
 
-To enable TMDB data and posters, configure either `TMDB_ACCESS_TOKEN` (the
-TMDB API Read Access Token, sent as a Bearer token) or `TMDB_API_KEY` (the
-TMDB API Key, v3 auth) in `backend/.env`, then restart the backend. If both
-are set, the access token is used.
+Add **one** of these to `backend/.env`, then restart the backend:
 
-## 2. Deploy to Render
+```env
+TMDB_ACCESS_TOKEN=your_read_access_token   # preferred — used first if both are set
+TMDB_API_KEY=your_v3_api_key
+```
 
-The included `render.yaml` defines two services — the API and the static
-site — as a single Blueprint.
+---
 
-1. Push this project to a Git repo (GitHub/GitLab).
-2. Make sure your four pickle files are committed inside `backend/` (or, for
-   larger files, fetched at startup from S3/GCS — `render.yaml` doesn't do
-   that for you).
-3. In the Render dashboard: **New → Blueprint**, point it at the repo. Render
-   will read `render.yaml` and propose both services.
-4. Before the first deploy finishes, set the backend's `TMDB_API_KEY`
-   environment variable (Render dashboard → `reelist-api` → Environment) —
-   it's marked `sync: false` in the blueprint so it isn't stored in Git.
-5. Once `reelist-api` is live, copy its URL (e.g.
-   `https://reelist-api.onrender.com`) into
-   `frontend/js/config.js` → `API_BASE_URL`, commit, and push. Render
-   redeploys the static site automatically.
-6. Optional but recommended: set the backend's `ALLOWED_ORIGINS` env var to
-   your frontend's exact URL instead of `*`, once you know it.
+## ☁️ Deploying to Render
 
-No Blueprint? You can create the two services by hand instead:
+`render.yaml` defines two services — the API and the static site — as a single **Blueprint**.
 
-- **Web Service** (`backend/`): build `pip install -r requirements.txt`,
-  start `uvicorn main:app --host 0.0.0.0 --port $PORT`.
-- **Static Site** (`frontend/`): no build command, publish directory `.`.
+```
+①  Push this project to a Git repo (GitHub / GitLab)
+②  Commit your 4 pickle files inside backend/
+      (or fetch larger ones from S3/GCS at startup)
+③  Render Dashboard → New → Blueprint → point at your repo
+④  Set TMDB_API_KEY on "reelist-api" → Environment
+      (marked sync: false — never stored in Git)
+⑤  Copy the live API URL into frontend/js/config.js → API_BASE_URL
+      → commit → push → static site auto-redeploys
+⑥  (Recommended) Lock ALLOWED_ORIGINS to your frontend's
+      exact URL instead of "*"
+```
 
-## Notes
+**No Blueprint? Set services up by hand:**
 
-- The frontend is plain HTML/CSS/JS — no bundler, no framework, no
-  `localStorage`/`sessionStorage` dependency, so it works as a static site
-  anywhere (Render, Netlify, GitHub Pages, S3).
-- All backend calls go through the endpoints already in `main.py`
-  (`/home`, `/tmdb/search`, `/movie/search`, `/recommend/*`); nothing on the
-  frontend talks to TMDB directly, so your TMDB key never reaches the
-  browser.
-- `render.yaml`'s free-tier web service will spin down after inactivity;
-  the first request after idling can take ~30–50s to wake it up.
+| Service | Type | Build Command | Start Command |
+|---|---|---|---|
+| `backend/` | Web Service | `pip install -r requirements.txt` | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
+| `frontend/` | Static Site | *(none)* | Publish directory: `.` |
+
+---
+
+## 📝 Good to Know
+
+- 🧩 The frontend is plain HTML/CSS/JS — no bundler, no framework, no `localStorage`/`sessionStorage` dependency — so it deploys as a static site anywhere (Render, Netlify, GitHub Pages, S3).
+- 🔒 All backend calls route through `main.py` (`/home`, `/tmdb/search`, `/movie/search`, `/recommend/*`) — nothing on the frontend talks to TMDB directly, so your API key never reaches the browser.
+- ⏳ Render's free-tier web service spins down after inactivity — the first request after idling can take **~30–50s** to wake it back up.
+
+---
+
+<div align="center">
+
+### 🎞️ Made with passion for cinema
+
+**Created by — Vishal Prajapati**
+
+</div>
